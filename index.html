@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#171310" />
+<title>Michi — Daily Tracker</title>
+<style>
+  :root{
+    --bg:#171310;
+    --panel:#211b17;
+    --panel2:#2a221d;
+    --text:#fff9f4;
+    --muted:#b9aaa0;
+    --accent:#f3c7b8;
+    --accent2:#d9a889;
+    --line:#3a2f28;
+    --good:#cfe1bd;
+    --shadow:0 16px 40px rgba(0,0,0,.28);
+    --radius:24px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif}
+  body{min-height:100vh;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+  button,input,select,textarea{font:inherit}
+  button{cursor:pointer}
+  .app{max-width:520px;margin:0 auto;min-height:100vh}
+  header{position:sticky;top:0;z-index:10;background:rgba(23,19,16,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+  .top{padding:20px 20px 8px;display:flex;justify-content:space-between;align-items:end}
+  .eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+  h1{margin:4px 0 0;font-family:Georgia,serif;font-size:34px;line-height:1}
+  .date{color:var(--muted);font-size:13px;text-align:right}
+  nav{display:flex;gap:8px;padding:10px 14px 12px}
+  nav button{flex:1;border:0;border-radius:14px;padding:10px;background:transparent;color:var(--muted);font-weight:700}
+  nav button.active{background:var(--panel2);color:var(--text)}
+  main{padding:18px 16px 110px}
+  .view{display:none}.view.active{display:block}
+  .card{background:linear-gradient(180deg,var(--panel),#1e1916);border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-bottom:14px;box-shadow:var(--shadow)}
+  .cardhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+  .cardtitle{font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);font-weight:800}
+  .pill{font-size:12px;padding:6px 10px;border-radius:999px;background:#33261f;color:#f8d4c0;border:1px solid #4a382f}
+  .habit{display:grid;grid-template-columns:46px 1fr auto;gap:12px;align-items:center;padding:14px 0;border-top:1px solid var(--line)}
+  .habit:first-of-type{border-top:0}
+  .iconbtn{width:42px;height:42px;border-radius:50%;border:1px solid #59453a;background:#2a211c;color:var(--text);font-size:19px}
+  .iconbtn.done{background:var(--good);color:#1c2515;border-color:transparent}
+  .habitname{font-weight:700}.sub{font-size:12px;color:var(--muted);margin-top:4px}
+  .mini{border:1px solid var(--line);background:transparent;color:var(--text);border-radius:12px;padding:8px 10px}
+  .waterbar{height:10px;background:#2e2723;border-radius:999px;overflow:hidden;margin:8px 0 10px}
+  .waterfill{height:100%;width:0;background:linear-gradient(90deg,#b9d7e6,#d9edf5);transition:.25s}
+  .waterrow{display:flex;gap:8px;flex-wrap:wrap}
+  .waterrow button{border:1px solid var(--line);background:#2a221d;color:var(--text);padding:8px 11px;border-radius:12px}
+  .affirm{font-family:Georgia,serif;font-size:22px;line-height:1.35;margin:6px 0;color:#ffe8de}
+  label{display:block;color:var(--muted);font-size:12px;margin:0 0 7px;font-weight:700}
+  input,select,textarea{width:100%;border:1px solid var(--line);background:#15110f;color:var(--text);border-radius:14px;padding:12px;outline:none}
+  textarea{min-height:92px;resize:vertical}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .primary{width:100%;border:0;border-radius:15px;padding:13px;background:var(--accent);color:#2b1f1a;font-weight:800;margin-top:10px}
+  .secondary{width:100%;border:1px solid var(--line);border-radius:15px;padding:12px;background:transparent;color:var(--text);font-weight:700;margin-top:8px}
+  .moneyTotal{font-family:Georgia,serif;font-size:34px;margin:2px 0 4px}
+  .expense{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+  .expense:first-child{border-top:0}
+  .cat{font-weight:700}.amt{font-weight:800}.small{font-size:12px;color:var(--muted)}
+  .historyDay{padding:14px 0;border-top:1px solid var(--line)}
+  .historyDay:first-child{border-top:0}
+  .historyTop{display:flex;justify-content:space-between;align-items:center}
+  .score{font-weight:800;color:#f4d8c8}
+  .empty{color:var(--muted);text-align:center;padding:24px 10px}
+  .danger{color:#ffb5b5;border-color:#6f3c3c}
+  .footerhint{font-size:11px;color:#8f8178;text-align:center;margin-top:18px;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="top">
+    <div>
+      <div class="eyebrow">little life dashboard</div>
+      <h1>Michi 🌷</h1>
+    </div>
+    <div class="date" id="dateLabel"></div>
+  </div>
+  <nav>
+    <button class="active" data-view="today">Today</button>
+    <button data-view="money">Spending</button>
+    <button data-view="history">History</button>
+    <button data-view="settings">Backup</button>
+  </nav>
+</header>
+
+<main>
+<section id="today" class="view active">
+  <div class="card">
+    <div class="cardhead">
+      <div class="cardtitle">🌱 Today</div>
+      <div class="pill" id="habitScore">0 / 4</div>
+    </div>
+
+    <div class="habit">
+      <button class="iconbtn" id="readBtn">📖</button>
+      <div><div class="habitname">Reading</div><div class="sub" id="readSub">not done yet</div></div>
+      <button class="mini" id="readToggle">Done</button>
+    </div>
+
+    <div class="habit">
+      <button class="iconbtn" id="workoutBtn">🏋🏻</button>
+      <div><div class="habitname">Workout</div><div class="sub" id="workoutSub">rest day is valid too ♡</div></div>
+      <button class="mini" id="workoutToggle">Done</button>
+    </div>
+
+    <div class="habit">
+      <button class="iconbtn" id="waterBtn">💧</button>
+      <div style="grid-column:2 / 4">
+        <div class="habitname">Water <span class="sub" id="waterText">0 / 2,000 ml</span></div>
+        <div class="waterbar"><div class="waterfill" id="waterFill"></div></div>
+        <div class="waterrow">
+          <button data-water="250">+250 ml</button>
+          <button data-water="500">+500 ml</button>
+          <button data-water="-250">undo</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="habit">
+      <button class="iconbtn" id="mindfulBtn">🌿</button>
+      <div><div class="habitname">Mindful Spend Day</div><div class="sub">did today feel intentional?</div></div>
+      <button class="mini" id="mindfulToggle">Yes</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="cardtitle">💛 Today's affirmation</div>
+    <div class="affirm" id="affirmation"></div>
+  </div>
+
+  <div class="card">
+    <div class="cardtitle">📝 Little Notes</div>
+    <textarea id="notes" placeholder="anything worth remembering today…"></textarea>
+  </div>
+</section>
+
+<section id="money" class="view">
+  <div class="card">
+    <div class="cardtitle">💸 Today's spending</div>
+    <div class="moneyTotal" id="todayTotal">$0.00</div>
+    <div class="small">Log it once. The total does the math for you.</div>
+
+    <div style="height:14px"></div>
+    <div class="grid2">
+      <div>
+        <label>Category</label>
+        <select id="expenseCat">
+          <option>Food</option><option>Beverage</option><option>Transport</option>
+          <option>Shopping</option><option>Beauty</option><option>Social</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div>
+        <label>Amount ($)</label>
+        <input id="expenseAmt" inputmode="decimal" placeholder="0.00">
+      </div>
+    </div>
+    <div style="margin-top:10px">
+      <label>Note (optional)</label>
+      <input id="expenseNote" placeholder="e.g. fish soup / Grab / nails">
+    </div>
+    <button class="primary" id="addExpense">+ Add expense</button>
+  </div>
+
+  <div class="card">
+    <div class="cardhead"><div class="cardtitle">Today</div><div class="pill" id="expenseCount">0 entries</div></div>
+    <div id="expenseList"></div>
+  </div>
+</section>
+
+<section id="history" class="view">
+  <div class="card">
+    <div class="cardtitle">📚 History</div>
+    <div class="small" style="margin:8px 0 6px">Your days collect here automatically.</div>
+    <div id="historyList"></div>
+  </div>
+</section>
+
+<section id="settings" class="view">
+  <div class="card">
+    <div class="cardtitle">☁️ Backup & Restore</div>
+    <p class="small" style="line-height:1.6">Your tracker saves on this device. Export a backup occasionally so you can restore it if Safari data is cleared or you change phones.</p>
+    <button class="primary" id="exportBtn">Export backup</button>
+    <input type="file" id="importFile" accept="application/json" style="display:none">
+    <button class="secondary" id="importBtn">Restore from backup</button>
+  </div>
+  <div class="card">
+    <div class="cardtitle">🧹 Reset</div>
+    <p class="small">Only use this if you want to erase all tracker data on this device.</p>
+    <button class="secondary danger" id="resetBtn">Erase all data</button>
+  </div>
+  <div class="footerhint">Prototype v1 · made to feel like a tiny app, not a spreadsheet ♡</div>
+</section>
+</main>
+</div>
+
+<script>
+const KEY='michi_tracker_v1';
+const affirmations=[
+  "I am becoming someone I can always count on.",
+  "Small choices still count. I am building trust with myself.",
+  "I do not need a perfect day for it to be a good day.",
+  "Consistency can be gentle.",
+  "I can enjoy my life and still take care of my future self.",
+  "I am allowed to move slowly and still be moving forward.",
+  "My habits are here to support me, not punish me."
+];
+
+function dayKey(d=new Date()){
+  const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), day=String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
+function freshDay(){return {reading:false,workout:false,water:0,mindful:false,notes:'',expenses:[]}}
+let db=JSON.parse(localStorage.getItem(KEY)||'{"days":{}}');
+const today=dayKey();
+if(!db.days[today]) db.days[today]=freshDay();
+function save(){localStorage.setItem(KEY,JSON.stringify(db))}
+function fmtMoney(n){return new Intl.NumberFormat('en-SG',{style:'currency',currency:'SGD'}).format(n||0)}
+function esc(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+
+const d=new Date();
+document.getElementById('dateLabel').innerHTML=d.toLocaleDateString('en-SG',{weekday:'short',day:'numeric',month:'short'}).replace(',','')+'<br>'+d.getFullYear();
+
+document.querySelectorAll('nav button').forEach(btn=>btn.onclick=()=>{
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  btn.classList.add('active'); document.getElementById(btn.dataset.view).classList.add('active');
+  if(btn.dataset.view==='history') renderHistory();
+});
+
+const afIndex=Math.abs([...today].reduce((a,c)=>a+c.charCodeAt(0),0))%affirmations.length;
+document.getElementById('affirmation').textContent=affirmations[afIndex];
+
+function render(){
+  const x=db.days[today];
+  const setDone=(id,done)=>document.getElementById(id).classList.toggle('done',done);
+  setDone('readBtn',x.reading); setDone('workoutBtn',x.workout); setDone('mindfulBtn',x.mindful); setDone('waterBtn',x.water>=2000);
+  document.getElementById('readSub').textContent=x.reading?'done for today ✨':'not done yet';
+  document.getElementById('workoutSub').textContent=x.workout?'movement logged ✨':'rest day is valid too ♡';
+  document.getElementById('readToggle').textContent=x.reading?'Undo':'Done';
+  document.getElementById('workoutToggle').textContent=x.workout?'Undo':'Done';
+  document.getElementById('mindfulToggle').textContent=x.mindful?'Undo':'Yes';
+  document.getElementById('waterText').textContent=`${x.water.toLocaleString()} / 2,000 ml`;
+  document.getElementById('waterFill').style.width=Math.min(100,x.water/2000*100)+'%';
+  const score=[x.reading,x.workout,x.water>=2000,x.mindful].filter(Boolean).length;
+  document.getElementById('habitScore').textContent=`${score} / 4`;
+  document.getElementById('notes').value=x.notes||'';
+  const total=x.expenses.reduce((s,e)=>s+Number(e.amount),0);
+  document.getElementById('todayTotal').textContent=fmtMoney(total);
+  document.getElementById('expenseCount').textContent=`${x.expenses.length} ${x.expenses.length===1?'entry':'entries'}`;
+  const list=document.getElementById('expenseList');
+  list.innerHTML=x.expenses.length?x.expenses.map((e,i)=>`
+    <div class="expense">
+      <div><div class="cat">${esc(e.category)}</div><div class="small">${esc(e.note||'')}</div></div>
+      <div style="text-align:right"><div class="amt">${fmtMoney(e.amount)}</div><button class="mini" onclick="delExpense(${i})">remove</button></div>
+    </div>`).join(''):'<div class="empty">Nothing spent yet ✨</div>';
+  save();
+}
+document.getElementById('readToggle').onclick=()=>{db.days[today].reading=!db.days[today].reading;render()}
+document.getElementById('workoutToggle').onclick=()=>{db.days[today].workout=!db.days[today].workout;render()}
+document.getElementById('mindfulToggle').onclick=()=>{db.days[today].mindful=!db.days[today].mindful;render()}
+document.querySelectorAll('[data-water]').forEach(b=>b.onclick=()=>{db.days[today].water=Math.max(0,db.days[today].water+Number(b.dataset.water));render()})
+document.getElementById('notes').addEventListener('input',e=>{db.days[today].notes=e.target.value;save()})
+document.getElementById('addExpense').onclick=()=>{
+  const amt=parseFloat(document.getElementById('expenseAmt').value);
+  if(!isFinite(amt)||amt<=0){alert('Enter an amount first ♡');return}
+  db.days[today].expenses.unshift({category:document.getElementById('expenseCat').value,amount:amt,note:document.getElementById('expenseNote').value.trim(),ts:Date.now()});
+  document.getElementById('expenseAmt').value='';document.getElementById('expenseNote').value='';render();
+}
+window.delExpense=(i)=>{db.days[today].expenses.splice(i,1);render()}
+
+function renderHistory(){
+  const days=Object.keys(db.days).sort().reverse();
+  const el=document.getElementById('historyList');
+  if(!days.length){el.innerHTML='<div class="empty">No history yet.</div>';return}
+  el.innerHTML=days.map(k=>{
+    const x=db.days[k], date=new Date(k+'T12:00:00');
+    const score=[x.reading,x.workout,x.water>=2000,x.mindful].filter(Boolean).length;
+    const total=x.expenses.reduce((s,e)=>s+Number(e.amount),0);
+    return `<div class="historyDay">
+      <div class="historyTop">
+        <div><b>${date.toLocaleDateString('en-SG',{day:'numeric',month:'short',weekday:'short'})}</b><div class="small">${x.water.toLocaleString()} ml water · ${x.workout?'workout ✓':'no workout'}</div></div>
+        <div class="score">${score}/4</div>
+      </div>
+      <div class="small" style="margin-top:8px">${fmtMoney(total)} spent${x.notes?' · “'+esc(x.notes.slice(0,58))+(x.notes.length>58?'…':'')+'”':''}</div>
+    </div>`
+  }).join('');
+}
+
+document.getElementById('exportBtn').onclick=()=>{
+  const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`michi-tracker-backup-${today}.json`;a.click();URL.revokeObjectURL(a.href);
+}
+document.getElementById('importBtn').onclick=()=>document.getElementById('importFile').click();
+document.getElementById('importFile').onchange=async e=>{
+  const f=e.target.files[0]; if(!f)return;
+  try{const incoming=JSON.parse(await f.text()); if(!incoming.days)throw 0; db=incoming; if(!db.days[today])db.days[today]=freshDay(); save();render();alert('Backup restored ♡')}
+  catch{alert('That backup file does not look valid.')}
+}
+document.getElementById('resetBtn').onclick=()=>{
+  if(confirm('Erase all tracker data on this device?')){
+    localStorage.removeItem(KEY);db={days:{[today]:freshDay()}};render();renderHistory();
+  }
+}
+render();
+</script>
+</body>
+</html>
