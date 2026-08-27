@@ -75,7 +75,7 @@ main{padding:0 15px 104px}.view{display:none}.view.active{display:block}.card{ba
  </div></div>
  <div class="card"><div class="kicker">Spending by category</div><div id="catSummary" style="margin-top:8px"></div></div>
  <div class="card"><div class="kicker">Workout breakdown</div><div id="workSummary" style="margin-top:8px"></div></div>
- <div class="card"><div class="row"><div class="kicker">Daily history</div><div class="muted">tap a day to edit</div></div><div id="historyList" style="margin-top:8px"></div></div>
+ <div class="card"><div class="row"><div class="kicker">Daily history</div><div class="muted">tap any day to edit</div></div><div id="historyList" style="margin-top:8px"></div></div>
 </section>
 </main>
 
@@ -178,13 +178,17 @@ document.querySelectorAll('.bottom button[data-view]').forEach(b=>b.onclick=()=>
 let historyMonth=monthKey();
 function shiftMonth(mk,delta){let [y,m]=mk.split('-').map(Number);let d=new Date(y,m-1+delta,1);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`}
 function renderHistory(){
- let ds=daysForMonth(historyMonth).sort(), isCurrent=historyMonth===monthKey(), upto=isCurrent?ds.filter(k=>k<=TODAY):ds, cats={},works={};let water=0,read=0,work=0,spend=0;
- let [hy,hm]=historyMonth.split('-').map(Number);document.getElementById('histMonth').textContent=new Date(hy,hm-1,1).toLocaleDateString('en-SG',{month:'long',year:'numeric'});
- upto.forEach(k=>{let x=db.days[k];if(x.water>=2000)water++;if(x.reading)read++;if(x.workout?.done){work++;works[x.workout.type||'Other']=(works[x.workout.type||'Other']||0)+1}(x.expenses||[]).forEach(e=>{cats[e.category]=(cats[e.category]||0)+Number(e.amount);spend+=Number(e.amount)})});
+ let [hy,hm]=historyMonth.split('-').map(Number),isCurrent=historyMonth===monthKey();
+ let daysInMonth=new Date(hy,hm,0).getDate();
+ let lastDay=isCurrent?Number(TODAY.slice(-2)):daysInMonth;
+ let upto=Array.from({length:lastDay},(_,i)=>`${historyMonth}-${String(i+1).padStart(2,'0')}`);
+ let cats={},works={};let water=0,read=0,work=0,spend=0;
+ document.getElementById('histMonth').textContent=new Date(hy,hm-1,1).toLocaleDateString('en-SG',{month:'long',year:'numeric'});
+ upto.forEach(k=>{let x=db.days[k]||blank();if(x.water>=2000)water++;if(x.reading)read++;if(x.workout?.done){work++;works[x.workout.type||'Other']=(works[x.workout.type||'Other']||0)+1}(x.expenses||[]).forEach(e=>{cats[e.category]=(cats[e.category]||0)+Number(e.amount);spend+=Number(e.amount)})});
  document.getElementById('statWater').textContent=water;document.getElementById('statRead').textContent=read;document.getElementById('statWork').textContent=work;document.getElementById('statSpend').textContent=money(spend);
  document.getElementById('catSummary').innerHTML=Object.keys(cats).length?Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([c,a])=>`<div class="catrow"><span>${esc(c)}</span><b>${money(a)}</b></div>`).join(''):'<div class="empty">No expenses yet.</div>';
  document.getElementById('workSummary').innerHTML=Object.keys(works).length?Object.entries(works).map(([w,n])=>`<div class="workrow"><span>${esc(w)}</span><b>${n}</b></div>`).join(''):'<div class="empty">No workouts yet.</div>';
- document.getElementById('historyList').innerHTML=upto.length?upto.sort().reverse().map(k=>{let x=db.days[k],d=new Date(k+'T12:00'),s=[x.water>=2000,x.workout?.done,x.reading].filter(Boolean).length,w=x.workout?.done?` · ${esc(x.workout.type)}${x.workout.minutes?' '+esc(x.workout.minutes)+' min':''}`:'';return `<div class="day" onclick="openDayEditor('${k}')"><div class="row"><b>${d.toLocaleDateString('en-SG',{weekday:'short',day:'numeric',month:'short'})}</b><span class="score">${s}/3</span></div><div class="daynote">${money(total(x))} spent${w}${x.notes?'<br>'+esc(x.notes):''}</div></div>`}).join(''):'<div class="empty">No entries for this month.</div>';
+ document.getElementById('historyList').innerHTML=upto.slice().reverse().map(k=>{let x=db.days[k]||blank(),d=new Date(k+'T12:00'),s=[x.water>=2000,x.workout?.done,x.reading].filter(Boolean).length,w=x.workout?.done?` · ${esc(x.workout.type)}${x.workout.minutes?' '+esc(x.workout.minutes)+' min':''}`:'';return `<div class="day" onclick="openDayEditor('${k}')"><div class="row"><b>${d.toLocaleDateString('en-SG',{weekday:'short',day:'numeric',month:'short'})}</b><span class="score">${s}/3</span></div><div class="daynote">${money(total(x))} spent${w}${x.notes?'<br>'+esc(x.notes):''}</div></div>`}).join('');
  let earliest=Object.keys(db.days).sort()[0]?.slice(0,7)||monthKey();document.getElementById('prevMonth').disabled=historyMonth<=earliest;document.getElementById('nextMonth').disabled=historyMonth>=monthKey();
 }
 document.getElementById('prevMonth').onclick=()=>{historyMonth=shiftMonth(historyMonth,-1);renderHistory()};
