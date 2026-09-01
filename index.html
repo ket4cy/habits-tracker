@@ -34,6 +34,7 @@ main{padding:0 15px 104px}.view{display:none}.view.active{display:block}.card{ba
 <div class="head"><h1>Habits Tracker</h1><div class="date" id="dateLabel"></div><button class="settingsBtn" id="gear">⚙︎</button></div>
 <main>
 <section id="today" class="view active">
+ <div class="card"><div class="kicker">♡ for today</div><div class="quote" id="affirm"></div></div>
  <div class="card">
   <div class="row"><div class="kicker">Today's progress</div><div id="score">0 / 3 ♡</div></div>
   <div class="progress"><div class="fill" id="habitFill"></div></div>
@@ -48,13 +49,13 @@ main{padding:0 15px 104px}.view{display:none}.view.active{display:block}.card{ba
    <div class="habitTop"><span class="iconLine" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5.5c2.8-.6 5.3.1 8 2v11c-2.7-1.9-5.2-2.6-8-2z"/><path d="M20 5.5c-2.8-.6-5.3.1-8 2v11c2.7-1.9 5.2-2.6 8-2z"/></svg></span><div class="grow"><div class="habitName">Reading</div><div class="muted" id="readText">not done yet</div></div></div><div class="choiceBtns"><button id="readDone">Done</button><button id="readNotDone">Not done</button></div>
   </div>
  </div>
- <div class="card"><div class="kicker">♡ for today</div><div class="quote" id="affirm"></div></div>
- <div class="card"><div class="kicker">📝 Little notes</div><div class="muted" style="margin:6px 0 10px">little wins, thoughts, memories… ♡</div><textarea class="notes" id="notes" placeholder="anything from today? ♡"></textarea><div id="spendShortcut" style="margin-top:14px;padding-top:13px;border-top:1px solid var(--line);cursor:pointer"><div class="row"><div><b>💸 Today’s spending</b><div class="muted" id="monthSpendMini"></div></div><div style="display:flex;align-items:center;gap:10px"><b id="todaySpend">$0.00</b><span style="font-size:22px">›</span></div></div></div></div>
+ <div class="card" id="spendShortcut" style="cursor:pointer"><div class="row"><div><div class="kicker">💸 Today’s spending</div><div class="muted" id="monthSpendMini" style="margin-top:6px"></div></div><div style="display:flex;align-items:center;gap:10px"><b id="todaySpend">$0.00</b><span style="font-size:22px">›</span></div></div></div>
+ <div class="card"><div class="kicker">📝 Little notes</div><div class="muted" style="margin:6px 0 10px">little wins, thoughts, memories… ♡</div><textarea class="notes" id="notes" placeholder="anything from today? ♡"></textarea></div>
 </section>
 
 <section id="expenses" class="view">
  <div class="card">
-  <div class="row"><div class="kicker" id="budgetMonth">August spending</div><button class="btn" id="editTarget">Edit target</button></div>
+  <div class="row"><div class="kicker" id="budgetMonth">September spending</div><button class="btn" id="editTarget">Edit target</button></div>
   <div class="money" id="monthSpent">$0.00</div><div class="budgetLine">total spending this month</div>
   <div style="height:18px"></div><div class="row"><div><b>💳 Credit Card</b><div class="budgetLine" id="budgetOf"></div></div><b id="ccSpent">$0.00</b></div>
   <div class="progress"><div class="fill" id="budgetFill"></div></div>
@@ -71,14 +72,13 @@ main{padding:0 15px 104px}.view{display:none}.view.active{display:block}.card{ba
 </section>
 
 <section id="history" class="view">
- <div class="card"><div class="row"><button class="btn" id="prevMonth">‹</button><div class="monthTitle" id="histMonth" style="margin:2px 0">August 2026</div><button class="btn" id="nextMonth">›</button></div><div class="kicker" style="text-align:center;margin:5px 0 14px">Monthly summary</div><div class="stats">
+ <div class="card"><div class="row"><button class="btn" id="prevMonth">‹</button><div class="monthTitle" id="histMonth" style="margin:2px 0">September 2026</div><button class="btn" id="nextMonth">›</button></div><div class="kicker" style="text-align:center;margin:5px 0 14px">Monthly summary</div><div class="stats">
   <div class="stat">💧 Water<b id="statWater"></b><span class="muted">days at 2L</span></div>
   <div class="stat">🏋🏻 Workouts<b id="statWork"></b><span class="muted">this month</span></div>
   <div class="stat">📖 Reading<b id="statRead"></b><span class="muted">days</span></div>
   <div class="stat">💸 Expenses<b id="statSpend"></b><span class="muted">logged</span></div>
  </div></div>
  <div class="card"><div class="kicker">Spending by category</div><div id="catSummary" style="margin-top:8px"></div></div>
- <div class="card"><div class="kicker">Workout breakdown</div><div id="workSummary" style="margin-top:8px"></div></div>
  <div class="card"><div class="row"><div class="kicker">Daily history</div><div class="muted">tap any day to edit</div></div><div id="historyList" style="margin-top:8px"></div></div>
 </section>
 </main>
@@ -117,112 +117,23 @@ main{padding:0 15px 104px}.view{display:none}.view.active{display:block}.card{ba
 </div></div>
 
 <script>
-const KEY='habits_tracker_v2';
-const SEED={"version": 2, "monthlyTargets": {"2026-08": 2200}, "days": {"2026-08-01": {"water": 0, "reading": true, "workout": {"done": true, "type": "Strength", "minutes": "", "detail": "8 side planks on each side"}, "notes": "🥳 partied at bae's! saw babsicky after such a long time and... he's not that attractive as i thought he was anymore lol", "expenses": [{"category": "Transport", "amount": 54.6, "note": "Grab"}, {"category": "Shopping", "amount": 209.4, "note": "elliosa pilates socks x2; nike fleece set - oversized hoodie + sweat pants (saved 15%!!)"}]}, "2026-08-02": {"water": 2000, "reading": false, "workout": {"done": false, "type": "", "minutes": "", "detail": ""}, "notes": "🥱 a lil hungover today and was craving sth rly sweet so caved into chagee delivery", "expenses": [{"category": "Food", "amount": 79.65, "note": "miso soup, tofu noodles, seaweed, soba, miso soup scoop, jeans adjuster"}, {"category": "Beverage", "amount": 30.9, "note": "chagee"}, {"category": "Shopping", "amount": 40.66, "note": "lovet black jeans"}, {"category": "Misc", "amount": 376.0, "note": "20 pilates credits"}]}, "2026-08-03": {"water": 2000, "reading": false, "workout": {"done": false, "type": "", "minutes": "", "detail": ""}, "notes": "🤗 looking forward to my frozen food loots so that i can start preparing healthier meals!!", "expenses": [{"category": "Food", "amount": 25.05, "note": "jap for lunch; honey chix rice set for dinner"}, {"category": "Beverage", "amount": 7.0, "note": "huggs latte"}]}, "2026-08-04": {"water": 2000, "reading": true, "workout": {"done": true, "type": "Strength", "minutes": "", "detail": "4x10 banded RDL / 3x15 banded lateral walk / 4x12 banded glute bridge / 3x30 secs side plank"}, "notes": "🤧 wanted to skip walking pad but decided on doing a few strength workouts instead", "expenses": [{"category": "Food", "amount": 15.0, "note": "mala"}, {"category": "Beverage", "amount": 3.85, "note": "luckin coffee"}, {"category": "Misc", "amount": 51.64, "note": "replaced screen protector; nose padding for spectacles"}]}, "2026-08-05": {"water": 2000, "reading": false, "workout": {"done": false, "type": "", "minutes": "", "detail": ""}, "notes": "🤮 zzz bought maki-san after lunch!! why!! i'm supposed to be on a body recomp journey. WAKE UP!!", "expenses": [{"category": "Food", "amount": 133.01, "note": "dinner at fysh for xq bday celebration"}, {"category": "Beverage", "amount": 3.85, "note": ""}]}, "2026-08-06": {"water": 2000, "reading": true, "workout": {"done": true, "type": "Barre", "minutes": "", "detail": ""}, "notes": "😖 almost throw up in class because i was still so hungover", "expenses": []}, "2026-08-07": {"water": 2000, "reading": true, "workout": {"done": false, "type": "", "minutes": "", "detail": ""}, "notes": "🫪 am i getting sick?? head feels heavy even tho i had enough rest and water...", "expenses": [{"category": "Food", "amount": 32.0, "note": "drinks on xq bday celebration"}, {"category": "Shopping", "amount": 39.1, "note": "yhf shorts"}, {"category": "Misc", "amount": 89.55, "note": "moncchichi hipper; disposable panties + cotton bud + hangover jelly"}]}, "2026-08-08": {"water": 2000, "reading": false, "workout": {"done": true, "type": "Pilates", "minutes": "", "detail": ""}, "notes": "🙏🏻 thankful that sharon was able to go pilates with me", "expenses": [{"category": "Food", "amount": 17.8, "note": "chicken rice for mom and i (to transfer $11.60 back to dbs); fruits"}, {"category": "Shopping", "amount": 127.24, "note": "thestylesoiree"}]}, "2026-08-09": {"water": 2000, "reading": false, "workout": {"done": true, "type": "Barre", "minutes": "", "detail": ""}, "notes": "💀 worked out with a hangover again zzz", "expenses": [{"category": "Food", "amount": 33.57, "note": "apollo"}, {"category": "Transport", "amount": 45.9, "note": "Grab"}]}, "2026-08-10": {"water": 0, "reading": false, "workout": {"done": false, "type": "", "minutes": "", "detail": ""}, "notes": "😵 bedrot entire dayyy", "expenses": []}, "2026-08-11": {"water": 2000, "reading": true, "workout": {"done": true, "type": "Walking", "minutes": "34", "detail": "walking pad @ 3.0 speed"}, "notes": "😩 weather is super hot and i honestly feel shitty because i feel so bloated and fat UGHHH!!!", "expenses": [{"category": "Food", "amount": 16.05, "note": "first bowl (to transfer back to dbs)"}]}, "2026-08-12": {"water": 2000, "reading": false, "workout": {"done": true, "type": "Pilates", "minutes": "", "detail": ""}, "notes": "🤔 think i shld go back to budgeting properly... way too many transfer back to dbs notes", "expenses": [{"category": "Food", "amount": 9.0, "note": "saizeriya"}, {"category": "Beverage", "amount": 3.85, "note": "luckin coffee"}, {"category": "Misc", "amount": 30.0, "note": "wifi bill"}]}, "2026-08-13": {"water": 0, "reading": true, "workout": {"done": false, "type": "", "minutes": "", "detail": ""}, "notes": "", "expenses": []}, "2026-07-01": {"water": 2000, "reading": true, "workout": {"done": true, "type": "Strength", "minutes": "", "detail": "50 body weight squats"}, "notes": "👏🏻 removed mold in store room\n✌🏻 wfh day - didn't spend a single cent\n🚫 almost bought another mikayla top", "expenses": [{"category": "Misc", "amount": 88.0, "note": "5 webarre credits"}]}, "2026-07-02": {"water": 2000, "reading": true, "workout": {"done": true, "type": "Pilates", "minutes": "", "detail": ""}, "notes": "😌 cleared 2 october-due accounts\n😵‍💫 legs day!! super wobbly after class", "expenses": [{"category": "Food", "amount": 4.8, "note": "fishball minced pork noodles soup"}]}, "2026-07-03": {"water": 2000, "reading": true, "workout": {"done": false, "type": "", "minutes": "", "detail": ""}, "notes": "😡 dealt with a nasty customer which i learnt that i still have to work on controlling my emotions and tone\n🥵 thighs still aching from ytd's workout\n🤗 decided to stay in on a friday night", "expenses": [{"category": "Food", "amount": 16.67, "note": "prawn noodles"}, {"category": "Beverage", "amount": 3.85, "note": "luckin coffee"}]}, "2026-07-04": {"water": 2000, "reading": true, "workout": {"done": true, "type": "Barre", "minutes": "", "detail": ""}, "notes": "😩 i really need to work on talking softly", "expenses": [{"category": "Food", "amount": 37.05, "note": "steak focaccia & hot hojicha latte"}, {"category": "Transport", "amount": 25.7, "note": "Grab - sincity"}, {"category": "Misc", "amount": 5.7, "note": "dabao bachormee for mom"}]}, "2026-07-05": {"water": 2000, "reading": true, "workout": {"done": true, "type": "Pilates", "minutes": "", "detail": ""}, "notes": "💪🏻 third workout of the week!!!\n🥰 dinner date with jw xq, shld do it more often with the girls (im thinking once a month / once every two month)\n🤤 had dessert too, the white peach oolong and roasted rice were sooo good!!", "expenses": [{"category": "Food", "amount": 58.0, "note": "dinner at medusa osteria romana; ice cream at petals and peak"}, {"category": "Transport", "amount": 25.9, "note": "Grab - to and fro dinner place"}]}, "2026-07-06": {"water": 2000, "reading": true, "workout": {"done": false, "type": "", "minutes": "", "detail": ""}, "notes": "😐 NTS: only buy dark-colored phone covers!!!\n🫩 can't believe i almost had to sacrifice what i really want to eat on my bday because of someone who's really picky", "expenses": [{"category": "Shopping", "amount": 50.91, "note": "moft phone cover"}, {"category": "Beauty", "amount": 20.0, "note": "eyelashes extension deposit"}]}, "2026-07-07": {"water": 2000, "reading": true, "workout": {"done": true, "type": "Barre", "minutes": "", "detail": ""}, "notes": "🙏🏻 thankful my team lead took initiative to solve some issues on my behalf", "expenses": [{"category": "Food", "amount": 12.8, "note": "kway chap; yuen kee dumpling noodles"}, {"category": "Beverage", "amount": 3.85, "note": "luckin coffee"}, {"category": "Shopping", "amount": 35.12, "note": "carrislabelle's white camisole"}, {"category": "Misc", "amount": 24.73, "note": "tabelog platform fee for restaurant reservation"}]}, "2026-07-08": {"water": 2000, "reading": true, "workout": {"done": true, "type": "Pilates", "minutes": "", "detail": ""}, "notes": "✌🏻 still made it to pilates despite missing the bus stop and having to walk under the rain\n🙊 had cup noodles after pilates today\n🤔 need to start on my meal prep starting from 15th - first step would be buying the ingredients", "expenses": [{"category": "Food", "amount": 22.86, "note": "lunch: genki sushi"}, {"category": "Beverage", "amount": 9.04, "note": "luckin coffee; chagee"}]}, "2026-07-09": {"water": 2000, "reading": true, "workout": {"done": false, "type": "", "minutes": "", "detail": ""}, "notes": "🥰 dinner with ivy and amanda at morinaga izakaya - food's 10/10 but service from the older waiter was... 4/10\n😌 last working day in office for the week!!!\n🙏🏻 cleared the last pertamina trigger case whoohoo!!! (it was triggered since feb lolol)", "expenses": [{"category": "Food", "amount": 102.0, "note": "coffee bean set meal; dinner at morinaga izakaya"}, {"category": "Beverage", "amount": 3.85, "note": "luckin coffee"}]}, "2026-07-10": {"water": 2000, "reading": true, "workout": {"done": false, "type": "", "minutes": "", "detail": ""}, "notes": "😏 wfh day so didn't spend any money!\n🙂‍↔️ stay home weekend~", "expenses": []}, "2026-07-11": {"water": 0, "reading": true, "workout": {"done": true, "type": "Barre", "minutes": "", "detail": ""}, "notes": "👏🏻 cancelled a $352.41 order that i initially placed\n🏋🏻‍♀️ enjoyed today's barre class by instructor gwen!", "expenses": [{"category": "Food", "amount": 27.23, "note": "kouign amann and ice tea with milk foam at apollo; yuen kee dumpling set meal"}, {"category": "Misc", "amount": 6.1, "note": "dabao nasilemak for mom"}]}, "2026-07-12": {"water": 2000, "reading": true, "workout": {"done": true, "type": "Pilates", "minutes": "", "detail": ""}, "notes": "🙏🏻 ah gu dabao food and cleared the wardrobe mom's been wanting to get rid of for us\n🥰 it's such a privilege that i am able to bedrot", "expenses": [{"category": "Food", "amount": 23.13, "note": "seafood poached rice thick bee hoon; fruits"}, {"category": "Beverage", "amount": 4.4, "note": "luckin frappe"}, {"category": "Shopping", "amount": 134.04, "note": "toothpaste x3, eyebrow pencil, lip liner, contour brush, lip mask, lip oil, hand wash x2, sanitary pads x9"}]}, "2026-07-13": {"water": 2000, "reading": true, "workout": {"done": true, "type": "Walking", "minutes": "70", "detail": "walking pad @ 4.5 speed"}, "notes": "🤗 wanted to walk only 30 mins on the walking pad but ended up doing 70 mins!!", "expenses": [{"category": "Food", "amount": 0.3, "note": "fishball minced pork noodles soup, remaining paid with CDC"}, {"category": "Shopping", "amount": 38.46, "note": "workout tops x2"}]}, "2026-07-14": {"water": 2000, "reading": true, "workout": {"done": false, "type": "", "minutes": "", "detail": ""}, "notes": "😤 had absolutely 0 self control, order 2 sweet drinks in a day - NO MORE NEXT TIME!!", "expenses": [{"category": "Food", "amount": 10.0, "note": "ginseng chix soup"}, {"category": "Beverage", "amount": 3.19, "note": "luckin coffee; old tea hut"}]}, "2026-07-15": {"water": 2000, "reading": true, "workout": {"done": false, "type": "", "minutes": "", "detail": ""}, "notes": "☹️ skipped pilates because i'm on my first day of period and it was raining heavily - i feel so guilty and shitty!!!!!", "expenses": [{"category": "Shopping", "amount": 92.1, "note": "mikayla lace top x2"}, {"category": "Misc", "amount": 178.84, "note": "fairprice"}, {"category": "Misc", "amount": 68.15, "note": "ben's mart"}]}, "2026-07-16": {"water": 2000, "reading": true, "workout": {"done": true, "type": "Barre", "minutes": "", "detail": ""}, "notes": "🙂‍↕️ been buying clothes more than i should but honestly i feel these are intentional pieces i.e. i can wear to work, casually and to parties", "expenses": [{"category": "Food", "amount": 30.31, "note": "sushiro; gelato"}, {"category": "Shopping", "amount": 97.41, "note": ""}, {"category": "Beauty", "amount": 58.0, "note": "eyelash extensions"}]}, "2026-07-17": {"water": 2000, "reading": true, "workout": {"done": false, "type": "", "minutes": "", "detail": ""}, "notes": "🤗 finally went out to drink after a week's break!", "expenses": [{"category": "Food", "amount": 16.07, "note": "genki sushi"}, {"category": "Beverage", "amount": 3.85, "note": "luckin"}, {"category": "Transport", "amount": 49.4, "note": "Grab"}, {"category": "Beauty", "amount": 103.5, "note": "steve v"}]}, "2026-07-18": {"water": 0, "reading": true, "workout": {"done": true, "type": "Barre", "minutes": "", "detail": ""}, "notes": "✌🏻 showed up for barre even tho i was really tired from drinks last night", "expenses": [{"category": "Transport", "amount": 39.3, "note": "Grab"}]}, "2026-07-19": {"water": 2000, "reading": true, "workout": {"done": true, "type": "Pilates", "minutes": "", "detail": ""}, "notes": "😅 spent quite a bit on clothes but i am revamping on my style hence bought those that definitively will have high mileage", "expenses": [{"category": "Shopping", "amount": 220.43, "note": ""}]}, "2026-07-20": {"water": 2000, "reading": true, "workout": {"done": false, "type": "", "minutes": "", "detail": ""}, "notes": "🥲 head hurts here and there but i've had enough sleep\n👍🏻 skipped drinking sesh with cto and friends", "expenses": [{"category": "Food", "amount": 16.55, "note": "dim sum; cheeseburger set meal"}, {"category": "Beverage", "amount": 3.85, "note": "luckin coffee"}, {"category": "Misc", "amount": 556.2, "note": "webarre 20 credits package"}]}, "2026-07-21": {"water": 2000, "reading": true, "workout": {"done": true, "type": "Walking", "minutes": "30", "detail": "walking pad @ 4.8 speed"}, "notes": "🤓 started on a new book, new genre (sci-fi) today", "expenses": [{"category": "Beauty", "amount": 84.0, "note": "mani & pedi"}, {"category": "Misc", "amount": 191.53, "note": "16 boxes of contact lenses"}]}, "2026-07-22": {"water": 2000, "reading": false, "workout": {"done": true, "type": "Barre", "minutes": "", "detail": ""}, "notes": "💪🏻 getting stronger in barre, don't feel as achy anymore", "expenses": []}, "2026-07-23": {"water": 2000, "reading": true, "workout": {"done": false, "type": "", "minutes": "", "detail": ""}, "notes": "😐 honestly quite annoyed with the hard selling from onlyaesthetics... BACK OFF!!", "expenses": [{"category": "Food", "amount": 16.9, "note": "dim sum"}, {"category": "Beverage", "amount": 3.85, "note": "luckin coffee"}]}, "2026-07-24": {"water": 2000, "reading": false, "workout": {"done": false, "type": "", "minutes": "", "detail": ""}, "notes": "🎉 partied at marquee for kshmr", "expenses": [{"category": "Transport", "amount": 21.5, "note": "Grab"}]}, "2026-07-25": {"water": 0, "reading": false, "workout": {"done": false, "type": "", "minutes": "", "detail": ""}, "notes": "😋 dinner at yeyak with manda, gary and marcus! food 10/10 but i was super hungover sooo couldn't drink as much", "expenses": [{"category": "Transport", "amount": 16.7, "note": "Grab"}, {"category": "Misc", "amount": 270.0, "note": "replaced rubbish chute"}]}, "2026-07-26": {"water": 0, "reading": true, "workout": {"done": false, "type": "", "minutes": "", "detail": ""}, "notes": "💯 ordered crabs for mom and i's dinner. super worth it!! lots of meat and it's fresh", "expenses": [{"category": "Food", "amount": 187.5, "note": "2 crabs"}]}, "2026-07-27": {"water": 2000, "reading": false, "workout": {"done": true, "type": "Barre", "minutes": "", "detail": ""}, "notes": "🫪 if only marcus ngieng owns a car and is as witty and shares the same humour as me lol oh wells", "expenses": [{"category": "Food", "amount": 6.4, "note": "yong tau foo"}, {"category": "Misc", "amount": 66.5, "note": "dinner @ isteak and gatten sushi"}]}, "2026-07-28": {"water": 2000, "reading": true, "workout": {"done": false, "type": "", "minutes": "", "detail": ""}, "notes": "🥳 birthday celebration for ly at super loco. food's pretty lit then we head over to cheers buddy for darts and drinks", "expenses": [{"category": "Food", "amount": 13.8, "note": "salad"}, {"category": "Beverage", "amount": 4.0, "note": "luckin coffee"}, {"category": "Transport", "amount": 13.6, "note": "Grab"}]}, "2026-07-29": {"water": 0, "reading": false, "workout": {"done": false, "type": "", "minutes": "", "detail": ""}, "notes": "🥳 birthday celebration for xq at fysh. food's pretty lit then we head over to another bar for drinks", "expenses": []}, "2026-07-30": {"water": 2000, "reading": false, "workout": {"done": true, "type": "Pilates", "minutes": "", "detail": ""}, "notes": "🧑‍🍳 airfried salmon and broccoli for lunch then prawns and broccoli for dinner. thinking of what else i can airfry for healthy mealsss", "expenses": [{"category": "Food", "amount": 31.8, "note": "dot dot bowl x4"}, {"category": "Shopping", "amount": 124.92, "note": "lululemon leggings"}, {"category": "Misc", "amount": 87.24, "note": "air fryer paper liner; jitsu life fan; phone cover + grip"}]}, "2026-07-31": {"water": 2000, "reading": false, "workout": {"done": false, "type": "", "minutes": "", "detail": ""}, "notes": "✌🏻 yay to one whole month of tracking!", "expenses": [{"category": "Food", "amount": 202.73, "note": "stock up on frozen and convenient food"}, {"category": "Beverage", "amount": 4.4, "note": "luckin coffee"}]}}};
+const KEY='habits_tracker_sep2026_v1';
+const SEED={
+  version:1,
+  monthlyTargets:{"2026-09":2200},
+  days:{}
+};
 const AFF=["I welcome this new month with hope, courage, and an open heart.", "Every small choice I make is shaping the woman I’m becoming.", "I trust myself to make decisions that my future self will thank me for.", "Consistency is changing my life, even when I cannot see it yet.", "I don’t need to rush my journey. I simply need to keep showing up.", "My worth is never measured by my productivity or possessions.", "I spend intentionally because peace is worth more than impulse.", "I celebrate every step toward financial freedom.", "I honour my body with movement, nourishment, and kindness.", "Rest is part of becoming stronger.", "I choose progress over perfection every single time.", "Every dollar I save is another brick in the life I’m building.", "I am learning to trust myself with money.", "My habits are becoming my identity.", "Payday is an opportunity to care for both Present Me and Future Me.", "I release guilt over my past and take responsibility for my future.", "I have everything I need to build a beautiful life.", "I deserve beautiful things, and I choose to buy them intentionally.", "I am stronger than my impulses.", "I choose experiences and memories that truly enrich my life.", "My confidence grows every time I keep a promise to myself.", "I make room for joy without losing sight of my goals.", "Today I celebrate how far I’ve come and welcome the woman I’m becoming.", "I give myself permission to grow at my own pace.", "My future is created by the choices I make today.", "I am proud of myself for continuing, even when it isn’t easy.", "I choose peace over comparison.", "I am building a life that feels as good as it looks.", "Every challenge is teaching me resilience and wisdom.", "The life I dream about is being built one day at a time.", "I am grateful for who I was, proud of who I am, and excited for who I am becoming."];
 function clone(x){return JSON.parse(JSON.stringify(x))}
 let db;
-let rawDb=localStorage.getItem(KEY);
-try{db=rawDb?JSON.parse(rawDb):null}catch(e){db=null}
-
-/* SAFE INIT: never replace existing tracker data because of a version mismatch. */
-if(db && typeof db==='object'){
-  try{
-    if(rawDb && !localStorage.getItem(KEY+'_safety_backup_before_recovery')){
-      localStorage.setItem(KEY+'_safety_backup_before_recovery',rawDb);
-    }
-  }catch(e){}
+try{db=JSON.parse(localStorage.getItem(KEY))}catch(e){db=null}
+if(!db || typeof db!=='object'){
+  db=clone(SEED);
+}else{
   db.days=db.days||{};
   db.monthlyTargets=Object.assign({},SEED.monthlyTargets||{},db.monthlyTargets||{});
-  db.version=2;
-}else{
-  db=clone(SEED);
+  db.version=1;
 }
-
-/* Restore original built-in July + Aug 1–13 records only where absent. */
-Object.entries(SEED.days||{}).forEach(([k,v])=>{
-  if(!db.days[k]) db.days[k]=clone(v);
-});
-
-function dayIsBlank(x){
-  return !x || (
-    Number(x.water||0)===0 &&
-    !x.reading &&
-    !(x.workout&&x.workout.done) &&
-    !(x.notes||'').trim() &&
-    !(x.expenses||[]).length
-  );
-}
-
-/* RECOVERY FACTS backed by screenshots from before the wipe.
-   Existing nonblank days are NEVER overwritten. */
-const RECOVERY={
-  "2026-08-15":{
-    water:0,reading:false,
-    workout:{done:false,type:"",minutes:"",detail:""},
-    notes:"",
-    expenses:[]
-  },
-  "2026-08-16":{
-    water:0,reading:true,
-    workout:{done:false,type:"",minutes:"",detail:""},
-    notes:"",
-    expenses:[
-      {category:"Recovered",amount:28.45,note:"Recovered exact daily total from pre-wipe History screenshot"}
-    ]
-  },
-  "2026-08-17":{
-    water:0,reading:false,
-    workout:{done:false,type:"",minutes:"",detail:""},
-    notes:"",
-    expenses:[
-      {category:"Recovered",amount:84.00,note:"Recovered exact daily total from pre-wipe History screenshot"}
-    ]
-  },
-  "2026-08-18":{
-    water:0,reading:false,
-    workout:{done:false,type:"",minutes:"",detail:""},
-    notes:"😵‍💫 went for an interview today but not sure how i did... they said they'll get back in 2 weeks. oh wells let's hope for the best!\n[Recovered note: pre-wipe History showed 1/3 habits completed, but the screenshot did not identify which habit.]",
-    expenses:[
-      {category:"Recovered",amount:136.46,note:"Recovered exact daily total from pre-wipe History screenshot"}
-    ]
-  },
-  "2026-08-19":{
-    water:0,reading:false,
-    workout:{done:false,type:"",minutes:"",detail:""},
-    notes:"🥳 excited to fly off to japan tonight!!!",
-    expenses:[
-      {category:"Recovered",amount:123.50,note:"Recovered exact daily total from pre-wipe History screenshot"}
-    ]
-  },
-  "2026-08-31":{
-    water:2000,reading:true,
-    workout:{done:true,type:"Barre",minutes:"",detail:""},
-    notes:"",
-    expenses:[
-      {category:"Misc",amount:28.85,payment:"Credit Card",note:"disposable panties"},
-      {category:"Food",amount:51.22,payment:"Credit Card",note:""},
-      {category:"Misc",amount:10.00,payment:"Credit Card",note:"xcraft earring"}
-    ]
-  }
-};
-
-Object.entries(RECOVERY).forEach(([k,v])=>{
-  if(dayIsBlank(db.days[k])) db.days[k]=clone(v);
-});
-
-/* Earlier screenshot proves Aug 27 had partial water.
-   Restore 1.50L only if the date is fully blank. If the device already has a
-   newer value (for example 1.75L), it is preserved. */
-if(dayIsBlank(db.days["2026-08-27"])){
-  db.days["2026-08-27"]={
-    water:1500,reading:false,
-    workout:{done:false,type:"",minutes:"",detail:""},
-    notes:"",
-    expenses:[]
-  };
-}
-
 localStorage.setItem(KEY,JSON.stringify(db))
 function key(d=new Date()){let y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),dd=String(d.getDate()).padStart(2,'0');return `${y}-${m}-${dd}`}
 function blank(){return {water:0,reading:false,workout:{done:false,type:'',minutes:'',detail:''},notes:'',expenses:[]}}
@@ -285,7 +196,6 @@ function renderHistory(){
  upto.forEach(k=>{let x=db.days[k]||blank();if(x.water>=2000)water++;if(x.reading)read++;if(x.workout?.done){work++;works[x.workout.type||'Other']=(works[x.workout.type||'Other']||0)+1}(x.expenses||[]).forEach(e=>{cats[e.category]=(cats[e.category]||0)+Number(e.amount);spend+=Number(e.amount)})});
  document.getElementById('statWater').textContent=water;document.getElementById('statRead').textContent=read;document.getElementById('statWork').textContent=work;document.getElementById('statSpend').textContent=money(spend);
  document.getElementById('catSummary').innerHTML=Object.keys(cats).length?Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([c,a])=>`<div class="catrow"><span>${esc(c)}</span><b>${money(a)}</b></div>`).join(''):'<div class="empty">No expenses yet.</div>';
- document.getElementById('workSummary').innerHTML=Object.keys(works).length?Object.entries(works).map(([w,n])=>`<div class="workrow"><span>${esc(w)}</span><b>${n}</b></div>`).join(''):'<div class="empty">No workouts yet.</div>';
  document.getElementById('historyList').innerHTML=upto.slice().reverse().map(k=>{let x=db.days[k]||blank(),d=new Date(k+'T12:00'),s=[x.water>=2000,x.workout?.done,x.reading].filter(Boolean).length,wl=(x.water/1000).toFixed(x.water%1000?2:0),ws=x.workout?.done?`${esc(x.workout.type||'Workout')}${x.workout.minutes?' '+esc(x.workout.minutes)+' min':''} ✓`:'No workout';return `<div class="day" onclick="openDayEditor('${k}')"><div class="row"><b>${d.toLocaleDateString('en-SG',{weekday:'short',day:'numeric',month:'short'})}</b><span class="score">${s}/3</span></div><div class="histHabits">Water: <b>${wl} / 2L${x.water>=2000?' ✓':''}</b> · Reading: <b>${x.reading?'Done ✓':'Not done'}</b> · Workout: <b>${ws}</b></div><div class="daynote">${money(total(x))} spent${x.notes?'<br>'+esc(x.notes):''}</div></div>`}).join('');
  let earliest=Object.keys(db.days).sort()[0]?.slice(0,7)||monthKey();document.getElementById('prevMonth').disabled=historyMonth<=earliest;document.getElementById('nextMonth').disabled=historyMonth>=monthKey();
 }
