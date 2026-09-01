@@ -14,9 +14,9 @@ body{min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}button,input,se
 main{padding:0 15px 104px}.view{display:none}.view.active{display:block}.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin:0 0 13px;box-shadow:var(--shadow)}
 .kicker{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);font-weight:800}.row{display:flex;align-items:center;justify-content:space-between;gap:12px}.big{font-family:Georgia,serif;font-size:30px}.muted{color:var(--muted);font-size:12px}.progress{height:9px;background:#f0e8e3;border-radius:99px;overflow:hidden;margin:12px 0 6px}.fill{height:100%;background:var(--pink);border-radius:99px;transition:.25s}
 .habit{padding:15px 0;border-top:1px solid var(--line)}.habit:first-of-type{border-top:0}.habitTop{display:flex;align-items:center;gap:12px}.circle{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--ink);font-size:18px}.circle.done{background:var(--sage);border-color:transparent}.habitName{font-weight:750}.grow{flex:1}.btn{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:12px;padding:8px 11px}.btn.primary{background:var(--pink2);border-color:#efd6d0}.waterBtns{display:flex;gap:7px;margin:10px 0 0 54px;flex-wrap:wrap}.waterBtns button{border:1px solid var(--line);background:#fff;border-radius:11px;padding:7px 10px;color:var(--ink);font-size:12px}
-.iconLine{width:42px;height:42px;min-width:42px;border-radius:50%;border:1px solid var(--line);background:#fff;display:flex;align-items:center;justify-content:center;color:#7d6d65;padding:0;-webkit-appearance:none;appearance:none}
+.iconLine{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:#fff;display:flex;align-items:center;justify-content:center;color:var(--ink)}
 .iconLine svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.choiceBtns{display:flex;gap:7px;margin:10px 0 0 54px}.choiceBtns button{border:1px solid var(--line);background:#fff;border-radius:11px;padding:7px 12px;color:var(--ink);font-size:12px}.choiceBtns button.selected{background:var(--pink2);border-color:#e3beb5;font-weight:800;box-shadow:inset 0 0 0 1px rgba(227,190,181,.35)}
+.choiceBtns{display:flex;gap:7px;margin:10px 0 0 54px}.choiceBtns button{border:1px solid var(--line);background:#fff;border-radius:11px;padding:7px 12px;color:var(--ink);font-size:12px}.choiceBtns button.selected{background:var(--pink2);border-color:#efd6d0;font-weight:800}
 .histHabits{margin-top:5px;font-size:12px;color:var(--muted);line-height:1.5}
 .quote{font-family:Georgia,serif;font-size:20px;line-height:1.45;margin-top:9px}.notes{width:100%;border:0;background:transparent;outline:0;resize:vertical;min-height:72px;color:var(--ink);padding:10px 0 0}
 .spendSnap{padding:3px 0}.money{font-family:Georgia,serif;font-size:34px}.budgetLine{font-size:13px;color:var(--muted);margin-top:4px}.budgetMeta{display:flex;justify-content:space-between;color:var(--muted);font-size:12px}
@@ -38,14 +38,14 @@ main{padding:0 15px 104px}.view{display:none}.view.active{display:block}.card{ba
   <div class="row"><div class="kicker">Today's progress</div><div id="score">0 / 3 ♡</div></div>
   <div class="progress"><div class="fill" id="habitFill"></div></div>
   <div class="habit">
-   <div class="habitTop"><button class="iconLine" id="waterCircle" aria-label="Water"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5s-5 5.6-5 10a5 5 0 0 0 10 0c0-4.4-5-10-5-10z"/></svg></button><div class="grow"><div class="habitName">Water</div><div class="muted" id="waterText">0 / 2L</div></div></div>
+   <div class="habitTop"><button class="iconLine" id="waterCircle"><svg viewBox="0 0 24 24"><path d="M12 3.5s-5 5.6-5 10a5 5 0 0 0 10 0c0-4.4-5-10-5-10z"/></svg></button><div class="grow"><div class="habitName">Water</div><div class="muted" id="waterText">0 / 2L</div></div></div>
    <div class="waterBtns"><button data-water="250">+250ml</button><button data-water="500">+500ml</button><button data-water="-250">undo</button></div>
   </div>
   <div class="habit">
    <div class="habitTop"><button class="circle" id="workCircle">🏋🏻</button><div class="grow"><div class="habitName">Workout</div><div class="muted" id="workText">not logged</div></div><button class="btn" id="workBtn">Log</button></div>
   </div>
   <div class="habit">
-   <div class="habitTop"><span class="iconLine" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5c2.8-.6 5.3.1 8 2v11c-2.7-1.9-5.2-2.6-8-2z"/><path d="M20 5.5c-2.8-.6-5.3.1-8 2v11c2.7-1.9 5.2-2.6 8-2z"/></svg></span><div class="grow"><div class="habitName">Reading</div><div class="muted" id="readText">choose one below</div></div></div><div class="choiceBtns"><button id="readDone">Done</button><button id="readNotDone">Not done</button></div>
+   <div class="habitTop"><span class="iconLine" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5.5c2.8-.6 5.3.1 8 2v11c-2.7-1.9-5.2-2.6-8-2z"/><path d="M20 5.5c-2.8-.6-5.3.1-8 2v11c2.7-1.9 5.2-2.6 8-2z"/></svg></span><div class="grow"><div class="habitName">Reading</div><div class="muted" id="readText">not done yet</div></div></div><div class="choiceBtns"><button id="readDone">Done</button><button id="readNotDone">Not done</button></div>
   </div>
  </div>
  <div class="card"><div class="kicker">♡ for today</div><div class="quote" id="affirm"></div></div>
@@ -102,8 +102,8 @@ main{padding:0 15px 104px}.view{display:none}.view.active{display:block}.card{ba
 <div class="modal" id="editDayModal"><div class="sheet">
 <div class="row"><h2 style="margin-bottom:4px">Edit day</h2><button class="btn" id="closeEditDay">Close</button></div><div class="muted" id="editDayLabel" style="margin-bottom:18px"></div>
 <div class="card"><div class="kicker">Habits</div>
-<div class="habit"><div class="habitTop"><span class="iconLine" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5s-5 5.6-5 10a5 5 0 0 0 10 0c0-4.4-5-10-5-10z"/></svg></span><div class="grow"><div class="habitName">Water</div><div class="muted" id="editWaterText"></div></div></div><div class="waterBtns"><button data-edit-water="250">+250ml</button><button data-edit-water="500">+500ml</button><button data-edit-water="-250">undo</button></div></div>
-<div class="habit"><div class="habitTop"><span class="iconLine" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5c2.8-.6 5.3.1 8 2v11c-2.7-1.9-5.2-2.6-8-2z"/><path d="M20 5.5c-2.8-.6-5.3.1-8 2v11c2.7-1.9 5.2-2.6 8-2z"/></svg></span><div class="grow"><div class="habitName">Reading</div><div class="muted" id="editReadingText">choose one below</div></div></div><div class="choiceBtns"><button id="editReadDone">Done</button><button id="editReadNotDone">Not done</button></div></div>
+<div class="habit"><div class="habitTop"><span class="iconLine" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3.5s-5 5.6-5 10a5 5 0 0 0 10 0c0-4.4-5-10-5-10z"/></svg></span><div class="grow"><div class="habitName">Water</div><div class="muted" id="editWaterText"></div></div></div><div class="waterBtns"><button data-edit-water="250">+250ml</button><button data-edit-water="500">+500ml</button><button data-edit-water="-250">undo</button></div></div>
+<div class="habit"><div class="habitTop"><span class="iconLine" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5.5c2.8-.6 5.3.1 8 2v11c-2.7-1.9-5.2-2.6-8-2z"/><path d="M20 5.5c-2.8-.6-5.3.1-8 2v11c2.7-1.9 5.2-2.6 8-2z"/></svg></span><div class="grow"><div class="habitName">Reading</div><div class="muted" id="editReadingText"></div></div></div><div class="choiceBtns"><button id="editReadDone">Done</button><button id="editReadNotDone">Not done</button></div></div>
 <div class="habit"><label>Workout type</label><select id="editWorkType"><option value="">No workout</option><option>Pilates</option><option>Barre</option><option>Strength</option><option>Walking</option><option>Other</option></select><div class="grid2" style="margin-top:9px"><div><label>Minutes</label><input id="editWorkMinutes" inputmode="numeric" placeholder="optional"></div><div><label>Details</label><input id="editWorkDetail" placeholder="optional"></div></div></div></div>
 <div class="card"><div class="kicker">Expenses</div><div id="editExpenseList" style="margin-top:8px"></div><div class="grid2" style="margin-top:12px"><div><label>Category</label><select id="editCat"><option>Food</option><option>Beverage</option><option>Shopping</option><option>Transport</option><option>Beauty</option><option>Misc</option></select></div><div><label>Amount ($)</label><input id="editAmt" inputmode="decimal" placeholder="0.00"></div></div><div class="grid2" style="margin-top:9px"><div><label>Paid with</label><select id="editPayMethod"><option value="">Unspecified</option><option value="Credit Card">💳 Credit Card</option><option value="Debit">🏦 Debit</option><option value="Cash">💵 Cash</option></select></div><div><label>Note</label><input id="editExpenseNote" placeholder="optional"></div></div><button class="btn primary" style="width:100%;margin-top:10px" id="editAddExpense">+ Add expense</button></div>
 <div class="card"><div class="kicker">Notes</div><textarea class="notes" id="editNotes" placeholder="anything worth remembering…"></textarea></div><button class="full" id="saveEditDay">Save changes</button>
@@ -111,7 +111,7 @@ main{padding:0 15px 104px}.view{display:none}.view.active{display:block}.card{ba
  <div class="field"><label>Monthly spending target ($)</label><input id="targetInput" inputmode="decimal"></div>
  <button class="full" id="saveTarget">Save target</button>
  <div style="height:18px"></div><div class="kicker">Backup & restore</div>
- <button class="btn" style="width:100%;margin-top:10px" id="exportBtn">Export backup</button><div class="muted" style="margin-top:8px">Safety snapshot is preserved automatically before any migration.</div>
+ <button class="btn" style="width:100%;margin-top:10px" id="exportBtn">Export backup</button>
  <input type="file" id="importFile" accept="application/json" style="display:none"><button class="btn" style="width:100%;margin-top:8px" id="importBtn">Restore from backup</button>
  <button class="btn" style="width:100%;margin-top:8px" id="closeSettings">Close</button>
 </div></div>
@@ -122,123 +122,23 @@ const SEED={"version": 2, "monthlyTargets": {"2026-08": 2200}, "days": {"2026-08
 const AFF=["I welcome this new month with hope, courage, and an open heart.", "Every small choice I make is shaping the woman I’m becoming.", "I trust myself to make decisions that my future self will thank me for.", "Consistency is changing my life, even when I cannot see it yet.", "I don’t need to rush my journey. I simply need to keep showing up.", "My worth is never measured by my productivity or possessions.", "I spend intentionally because peace is worth more than impulse.", "I celebrate every step toward financial freedom.", "I honour my body with movement, nourishment, and kindness.", "Rest is part of becoming stronger.", "I choose progress over perfection every single time.", "Every dollar I save is another brick in the life I’m building.", "I am learning to trust myself with money.", "My habits are becoming my identity.", "Payday is an opportunity to care for both Present Me and Future Me.", "I release guilt over my past and take responsibility for my future.", "I have everything I need to build a beautiful life.", "I deserve beautiful things, and I choose to buy them intentionally.", "I am stronger than my impulses.", "I choose experiences and memories that truly enrich my life.", "My confidence grows every time I keep a promise to myself.", "I make room for joy without losing sight of my goals.", "Today I celebrate how far I’ve come and welcome the woman I’m becoming.", "I give myself permission to grow at my own pace.", "My future is created by the choices I make today.", "I am proud of myself for continuing, even when it isn’t easy.", "I choose peace over comparison.", "I am building a life that feels as good as it looks.", "Every challenge is teaching me resilience and wisdom.", "The life I dream about is being built one day at a time.", "I am grateful for who I was, proud of who I am, and excited for who I am becoming."];
 function clone(x){return JSON.parse(JSON.stringify(x))}
 let db;
-let rawBefore=null;
-try{
-  rawBefore=localStorage.getItem(KEY);
-  db=rawBefore?JSON.parse(rawBefore):null;
-}catch(e){db=null}
+let rawDb=localStorage.getItem(KEY);
+try{db=rawDb?JSON.parse(rawDb):null}catch(e){db=null}
 
-/* SAFETY FIRST:
-   Never replace an existing database just because its version differs.
-   Preserve a snapshot before migration, then normalize in place. */
-if(rawBefore){
+/* SAFE STORAGE MIGRATION:
+   Never wipe an existing tracker just because its version differs. */
+if(db && typeof db==='object'){
   try{
-    const safetyKey=KEY+'_safety_snapshot';
-    if(!localStorage.getItem(safetyKey)) localStorage.setItem(safetyKey,rawBefore);
+    const safetyKey=KEY+'_pre_migration_backup';
+    if(rawDb && !localStorage.getItem(safetyKey)) localStorage.setItem(safetyKey,rawDb);
   }catch(e){}
+  db.days=db.days||{};
+  db.monthlyTargets=Object.assign({},SEED.monthlyTargets||{},db.monthlyTargets||{});
+  db.version=2;
+  Object.entries(SEED.days).forEach(([k,v])=>{if(!db.days[k])db.days[k]=clone(v)});
+}else{
+  db=clone(SEED);
 }
-if(!db || typeof db!=='object') db=clone(SEED);
-db.days=db.days||{};
-db.monthlyTargets=db.monthlyTargets||{};
-db.version=2;
-
-/* Rescue from any older tracker-shaped localStorage object still present.
-   We merge only into dates that are currently blank/missing. */
-function isBlankDay(x){
-  if(!x) return true;
-  const noWorkout=!x.workout || !x.workout.done;
-  return Number(x.water||0)===0 && !x.reading && noWorkout &&
-         !(x.notes||'').trim() && !(x.expenses||[]).length;
-}
-function normalizeLegacyDay(x){
-  if(!x) return null;
-  if(Array.isArray(x.expenses) || typeof x.water==='number'){
-    return clone(x);
-  }
-  if(typeof x==='object' && x.spending){
-    const map={Grab:'Transport',Essentials:'Misc',Other:'Misc'};
-    const expenses=[];
-    Object.entries(x.spending||{}).forEach(([c,a])=>{
-      const n=Number(a||0);
-      if(n>0) expenses.push({category:map[c]||c,amount:n,note:'Recovered from older tracker'});
-    });
-    return {
-      water:x.water?2000:0,
-      reading:!!x.reading,
-      workout:{done:!!x.workout,type:x.workout?(x.workout_note||'Other'):'',minutes:'',detail:x.workout_note||''},
-      notes:x.notes||'',
-      expenses
-    };
-  }
-  return null;
-}
-try{
-  for(let i=0;i<localStorage.length;i++){
-    const k=localStorage.key(i);
-    if(!k || k===KEY || k===KEY+'_safety_snapshot') continue;
-    let cand=null;
-    try{cand=JSON.parse(localStorage.getItem(k))}catch(e){}
-    if(!cand || !cand.days) continue;
-    Object.entries(cand.days).forEach(([dk,dv])=>{
-      let iso=dk;
-      if(/^\d{1,2}$/.test(dk)) iso=`2026-08-${String(dk).padStart(2,'0')}`;
-      if(!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return;
-      const nd=normalizeLegacyDay(dv);
-      if(nd && isBlankDay(db.days[iso]) && !isBlankDay(nd)) db.days[iso]=nd;
-    });
-  }
-}catch(e){}
-
-/* Merge the original seed only where a date is truly absent.
-   This can never overwrite an existing date. */
-Object.entries(SEED.days||{}).forEach(([k,v])=>{if(!db.days[k])db.days[k]=clone(v)});
-db.monthlyTargets=Object.assign({},SEED.monthlyTargets||{},db.monthlyTargets||{});
-
-/* Recover only facts visible in the user's pre-wipe screenshots.
-   These are applied ONLY if the day is still blank after the rescue above.
-   "Recovered" expense rows preserve the exact daily total without inventing
-   an original category when the screenshot did not show it. */
-const SCREENSHOT_RECOVERY={
-  "2026-08-15":{
-    water:0,reading:false,workout:{done:false,type:"",minutes:"",detail:""},
-    notes:"",expenses:[]
-  },
-  "2026-08-16":{
-    water:0,reading:true,workout:{done:false,type:"",minutes:"",detail:""},
-    notes:"",expenses:[{category:"Recovered",amount:28.45,note:"Recovered daily total from pre-wipe History screenshot; original breakdown unavailable"}]
-  },
-  "2026-08-17":{
-    water:0,reading:false,workout:{done:false,type:"",minutes:"",detail:""},
-    notes:"",expenses:[{category:"Recovered",amount:84.00,note:"Recovered daily total from pre-wipe History screenshot; original breakdown unavailable"}]
-  },
-  "2026-08-18":{
-    water:2000,reading:false,workout:{done:false,type:"",minutes:"",detail:""},
-    notes:"😵‍💫 went for an interview today but not sure how i did... they said they'll get back in 2 weeks. oh wells let's hope for the best!",
-    expenses:[{category:"Recovered",amount:136.46,note:"Recovered daily total from pre-wipe History screenshot; original breakdown unavailable"}]
-  },
-  "2026-08-19":{
-    water:0,reading:false,workout:{done:false,type:"",minutes:"",detail:""},
-    notes:"🥳 excited to fly off to japan tonight!!!",
-    expenses:[{category:"Recovered",amount:123.50,note:"Recovered daily total from pre-wipe History screenshot; original breakdown unavailable"}]
-  },
-  "2026-08-27":{
-    water:1500,reading:false,workout:{done:false,type:"",minutes:"",detail:""},
-    notes:"",expenses:[]
-  },
-  "2026-08-31":{
-    water:2000,reading:true,workout:{done:true,type:"Barre",minutes:"",detail:""},
-    notes:"",
-    expenses:[
-      {category:"Misc",amount:28.85,payment:"Credit Card",note:"disposable panties"},
-      {category:"Food",amount:51.22,payment:"Credit Card",note:""},
-      {category:"Misc",amount:10.00,payment:"Credit Card",note:"xcraft earring"}
-    ]
-  }
-};
-Object.entries(SCREENSHOT_RECOVERY).forEach(([k,v])=>{
-  if(isBlankDay(db.days[k])) db.days[k]=clone(v);
-});
-
 localStorage.setItem(KEY,JSON.stringify(db))
 function key(d=new Date()){let y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),dd=String(d.getDate()).padStart(2,'0');return `${y}-${m}-${dd}`}
 function blank(){return {water:0,reading:false,workout:{done:false,type:'',minutes:'',detail:''},notes:'',expenses:[]}}
@@ -258,7 +158,7 @@ function render(){
  const x=db.days[TODAY], done=[x.water>=2000,x.workout?.done,x.reading].filter(Boolean).length;
  document.getElementById('score').textContent=`${done} / 3 ♡`;document.getElementById('habitFill').style.width=(done/3*100)+'%';
  document.getElementById('waterText').textContent=`${(x.water/1000).toFixed(x.water%1000?2:0)} / 2L`;document.getElementById('waterCircle').classList.toggle('done',x.water>=2000);
- document.getElementById('readText').textContent='choose one below';document.getElementById('readDone').classList.toggle('selected',x.reading);document.getElementById('readNotDone').classList.toggle('selected',!x.reading);document.getElementById('readDone').textContent=x.reading?'Done ✓':'Done';document.getElementById('readNotDone').textContent=!x.reading?'Not done ✓':'Not done';
+ document.getElementById('readText').textContent=x.reading?'done for today ♡':'not done yet';document.getElementById('readDone').classList.toggle('selected',x.reading);document.getElementById('readNotDone').classList.toggle('selected',!x.reading);
  document.getElementById('workCircle').classList.toggle('done',!!x.workout?.done);
  let w=x.workout||{};document.getElementById('workText').textContent=w.done?[w.type,w.minutes?`${w.minutes} min`:''].filter(Boolean).join(' · '):'not logged';document.getElementById('workBtn').textContent=w.done?'Edit':'Log';
  document.getElementById('notes').value=x.notes||'';
@@ -309,7 +209,7 @@ document.getElementById('prevMonth').onclick=()=>{historyMonth=shiftMonth(histor
 document.getElementById('nextMonth').onclick=()=>{historyMonth=shiftMonth(historyMonth,1);renderHistory()};
 let editingDate=null,editDraft=null;const edm=document.getElementById('editDayModal');
 window.openDayEditor=function(k){editingDate=k;editDraft=clone(db.days[k]||blank());if(!editDraft.workout)editDraft.workout={done:false,type:'',minutes:'',detail:''};if(!editDraft.expenses)editDraft.expenses=[];document.getElementById('editDayLabel').textContent=new Date(k+'T12:00').toLocaleDateString('en-SG',{weekday:'long',day:'numeric',month:'long',year:'numeric'});document.getElementById('editWorkType').value=editDraft.workout.done?(editDraft.workout.type||'Other'):'';document.getElementById('editWorkMinutes').value=editDraft.workout.minutes||'';document.getElementById('editWorkDetail').value=editDraft.workout.detail||'';document.getElementById('editNotes').value=editDraft.notes||'';renderDayEditor();edm.classList.add('open')}
-function renderDayEditor(){document.getElementById('editWaterText').textContent=`${(editDraft.water/1000).toFixed(editDraft.water%1000?2:0)} / 2L`;document.getElementById('editReadingText').textContent='choose one below';document.getElementById('editReadDone').classList.toggle('selected',editDraft.reading);document.getElementById('editReadNotDone').classList.toggle('selected',!editDraft.reading);document.getElementById('editReadDone').textContent=editDraft.reading?'Done ✓':'Done';document.getElementById('editReadNotDone').textContent=!editDraft.reading?'Not done ✓':'Not done';document.getElementById('editExpenseList').innerHTML=editDraft.expenses.length?editDraft.expenses.map((e,i)=>`<div class="expense"><div><b>${esc(e.category)}</b><div class="muted">${esc(e.note)}</div><span class="paytag">${esc(e.payment||'Unspecified')}</span></div><div><div class="amt">${money(e.amount)}</div><button class="remove" onclick="removeEditExpense(${i})">remove</button></div></div>`).join(''):'<div class="empty">No expenses logged.</div>'}
+function renderDayEditor(){document.getElementById('editWaterText').textContent=`${(editDraft.water/1000).toFixed(editDraft.water%1000?2:0)} / 2L`;document.getElementById('editReadingText').textContent=editDraft.reading?'done ♡':'not done';document.getElementById('editReadDone').classList.toggle('selected',editDraft.reading);document.getElementById('editReadNotDone').classList.toggle('selected',!editDraft.reading);document.getElementById('editExpenseList').innerHTML=editDraft.expenses.length?editDraft.expenses.map((e,i)=>`<div class="expense"><div><b>${esc(e.category)}</b><div class="muted">${esc(e.note)}</div><span class="paytag">${esc(e.payment||'Unspecified')}</span></div><div><div class="amt">${money(e.amount)}</div><button class="remove" onclick="removeEditExpense(${i})">remove</button></div></div>`).join(''):'<div class="empty">No expenses logged.</div>'}
 document.querySelectorAll('[data-edit-water]').forEach(b=>b.onclick=()=>{editDraft.water=Math.max(0,(editDraft.water||0)+Number(b.dataset.editWater));renderDayEditor()});document.getElementById('editReadDone').onclick=()=>{editDraft.reading=true;renderDayEditor()};document.getElementById('editReadNotDone').onclick=()=>{editDraft.reading=false;renderDayEditor()};window.removeEditExpense=i=>{editDraft.expenses.splice(i,1);renderDayEditor()};
 document.getElementById('editAddExpense').onclick=()=>{let a=parseFloat(document.getElementById('editAmt').value);if(!isFinite(a)||a<=0){alert('Enter an amount first ♡');return}let p=document.getElementById('editPayMethod').value;if(!p){alert('Choose how you paid ♡');return}editDraft.expenses.push({category:document.getElementById('editCat').value,amount:a,payment:p,note:document.getElementById('editExpenseNote').value.trim()});document.getElementById('editAmt').value='';document.getElementById('editExpenseNote').value='';renderDayEditor()};
 document.getElementById('closeEditDay').onclick=()=>edm.classList.remove('open');document.getElementById('saveEditDay').onclick=()=>{let wt=document.getElementById('editWorkType').value;editDraft.workout={done:!!wt,type:wt,minutes:wt?document.getElementById('editWorkMinutes').value.trim():'',detail:wt?document.getElementById('editWorkDetail').value.trim():''};editDraft.notes=document.getElementById('editNotes').value;db.days[editingDate]=editDraft;save();edm.classList.remove('open');render();renderHistory()};
